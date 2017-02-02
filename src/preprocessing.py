@@ -48,14 +48,9 @@ def erase_lines(filename):
             absolutes = [int(fabs(r - g)), int(fabs(r - b)), int(fabs(g - b))]
             #neither white or a shade of gray
             if max(absolutes) > color:
-                #turns color pixels to white
+               #turns color pixels to white
     	       result[column, row] = white
                continue
-            #shade of gray
-        	#if max(absolutes) == 0:
-    		#    if r > 0.9 * gray and r < 1.1 * gray: # intermediate
-        	#    	result[column, row] = white
-        	#    	continue
             #turns dark pixels to pure black
             if rgb_sum < extreme:
     		    result[column, row] = black
@@ -64,10 +59,36 @@ def erase_lines(filename):
             if mean < treshold:
     		    result[column, row] = black
     		    blacks.append((column, row))
-            else:
-    		    result[column, row] = white
+    		    continue
+            #if it is a brighter pixel
+            #searching for the characters that are in white pixels instead of black
+            if mean > 255 - extreme:
+                acum = 0
+                #right, bottom, left and top neighbor of the current pixel
+                neighborhood = [(column + 1, row), (column, row + 1), (column - 1, row), (column, row - 1)]
+                #check the current pixel neighborhood
+                for neighbor in neighborhood:
+                    try:
+                        pixel2 = pixels[neighbor[0], neighbor[1]]
+                    except IndexError:
+                        continue
+                    r2 = int(pixel2[0])
+                    g2 = int(pixel2[1])
+                    b2 = int(pixel2[2])
+            	    rgb_sum2 = r2 + g2 + b2
+                    mean2 = rgb_sum2 / 3
+                    #difference between the current pixel and each of its neighbors
+                    acum += fabs(mean - mean2)
+                #if there is a considerable difference, then this pixel is considered to be part of a white character
+                if acum > 1 and acum < 250:
+    		        result[column, row] = black
+    		        blacks.append((column, row))
+                #no difference, then is a pixel of the background and stays white
+                else:
+                    result[column, row] = white
 
     #minimum pixels to be considered a verical line
+
     line = 30
     remaining = list()
     while len(blacks) > 0:
