@@ -5,4 +5,5 @@ if __name__ == "__main__":
     directory = pre.convertPDF()
     for filename in os.listdir(directory):
         filepath = directory + "/" + filename
-        pre.erase_lines(filepath)
+        img = pre.erase_lines(filepath)
+        extract_text(filename, img)

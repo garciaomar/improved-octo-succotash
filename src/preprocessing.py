@@ -13,7 +13,10 @@ def convertPDF():
         #removes the file extension
         filename = path[10:-4]
         #creates a directory to store the output images
-        os.system("mkdir images/" + filename)
+        if os.path.isdir("images/" + filename):
+            pass
+        else:
+            os.system("mkdir images/" + filename)
         output = "images/" + filename + "/tabla.png"
         fromPage = sys.argv[2]
         toPage = sys.argv[3]
@@ -127,3 +130,10 @@ def erase_lines(filename):
     name = filename[:-4]
     data = Image.fromarray(result)
     data.save(name + "_binary.png")
+    return data
+
+def extract_text(filename, img):
+    name = filename[:-4]
+    outputfile = name + "_out"
+    os.chdir("/textfiles")
+    os.system("tesseract " + filepath + outputfile)
