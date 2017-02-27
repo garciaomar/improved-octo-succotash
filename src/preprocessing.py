@@ -132,8 +132,32 @@ def erase_lines(filename):
     data.save(name + "_binary.png")
     return data
 
-def extract_text(filename, img):
-    name = filename[:-4]
-    outputfile = name + "_out"
-    os.chdir("/textfiles")
-    os.system("tesseract " + filepath + outputfile)
+def dfs(pixels, column, row):
+    cont = true
+    while(cont):
+        (width, height, chanels) = numpy.shape(pixels)
+        pixel = pixels[column, row]
+        r = int(pixel[0])
+        g = int(pixel[1])
+        b = int(pixel[2])
+        rgb_sum = r + g + b
+        mean = rgb_sum / 3
+        neighborhood = [(column + 1, row), (column, row + 1), (column - 1, row), (column, row - 1)]
+        for neighbor in neighborhood:
+            try:
+                pixel2 = pixels[neighbor[0], neighbor[1]]
+            except IndexError:
+                continue
+            r2 = int(pixel2[0])
+            g2 = int(pixel2[1])
+            b2 = int(pixel2[2])
+            rgb2_sum = r2 + g2 + b2
+            mean2 = rgb2_sum / 3
+            if mean - mean2 == 0:
+                column = neighbor[0]
+                row = neighbor[1]
+                cont = True
+                break
+            else:
+                cont = False
+                continue
