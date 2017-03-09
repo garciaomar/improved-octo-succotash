@@ -7,4 +7,5 @@ if __name__ == "__main__":
     for filename in os.listdir(directory):
         filepath = directory + "/" + filename
         img = pre.erase_lines(filepath)
-        ocr.extract_text(filename, img)
+        txt_file = ocr.extract_text(filename, img)
+        parse_txt(txt_file)
