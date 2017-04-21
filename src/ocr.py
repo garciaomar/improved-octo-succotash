@@ -19,6 +19,7 @@ def parse(filepath):
     table = dict()
     top = None
     bottom = None
+    lines = list()
     for tag in xml_tags:
         ignore_tags.append(tag + '>')
         ignore_tags.append('<' + tag)
@@ -57,4 +58,27 @@ def parse(filepath):
                         words.append(word)
             if len(words) > 0:
                 lines.append(words)
-hocr.close()
+    hocr.close()
+    for line in lines:
+        kept += line
+    position = 0
+    rows = dict()
+    while position < len(kept):
+        word = kept[position]
+        if word not in rows:
+            rows[word] = [word]
+        remove = list()
+        for other in kept:
+            if word != other:
+                if word.same(other):
+                    word.merge(other)
+                    remove.append(other)
+                elif word.row(other):
+                    rows[word].append(other)
+                    remove.append(other)
+        if len(remove) > 0:
+            for absorbed in remove:
+                kept.remove(absorbed)
+            position = 0
+        else:
+            position += 1
