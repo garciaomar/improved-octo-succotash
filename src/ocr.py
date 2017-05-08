@@ -1,12 +1,13 @@
 import os
 
-def extract_text(filename, img):
+def extract_text(filename, filepath):
     name = filename[:-4]
-    outputfile = name + "_out"
-    options = "-l spa hocr"
-    os.chdir("/textfiles")
+    outputfile = "xmlfiles/" + name + "_out"
+    options = " -l spa hocr"
+    filepath += "/" + name + "_binary.png "
     os.system("tesseract " + filepath + outputfile + options)
-    return outputfilename
+    outputfile += ".hocr"
+    return outputfile
 
 def parse(filepath):
     try:
@@ -59,6 +60,7 @@ def parse(filepath):
             if len(words) > 0:
                 lines.append(words)
     hocr.close()
+    kept = list()
     for line in lines:
         kept += line
     position = 0
@@ -82,3 +84,8 @@ def parse(filepath):
             position = 0
         else:
             position += 1
+    #Writing output file
+    output_words = open("prueba.txt", "w")
+    for word in kept:
+        output_words.write(word)
+    output_words.close()

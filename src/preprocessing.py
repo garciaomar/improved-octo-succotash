@@ -29,7 +29,11 @@ def convertPDF():
 def erase_lines(filename):
     image = Image.open(filename)
     pixels = numpy.array(image)
-    (width, height, chanels) = numpy.shape(pixels)
+    #(width, height, chanels) = numpy.shape(pixels)
+    elems = list()
+    elems = numpy.shape(pixels)
+    width = elems[0]
+    height = elems[1]
 
     black = 0
     white = 255
@@ -37,7 +41,7 @@ def erase_lines(filename):
     color = 10
     extreme = 20
     gray = 192
-    result = numpy.zeros((width,height), numpy.uint8)
+    result = numpy.zeros((width, height), numpy.uint8)
     blacks = list()
 
     for column in xrange(width):
@@ -129,8 +133,10 @@ def erase_lines(filename):
 
     name = filename[:-4]
     data = Image.fromarray(result)
-    data.save(name + "_binary.png")
-    return data
+    outputname = name + "_binary.png"
+    data.save(outputname)
+    print("Saved binary image")
+    return outputname
 
 def dfs(pixels, column, row):
     cont = true

@@ -6,6 +6,9 @@ if __name__ == "__main__":
     directory = pre.convertPDF()
     for filename in os.listdir(directory):
         filepath = directory + "/" + filename
-        img = pre.erase_lines(filepath)
-        txt_file = ocr.extract_text(filename, img)
-        parse_txt(txt_file)
+        binary_filepath = filepath[:-4] + "_binary.png"
+        if os.path.isfile(binary_filepath):
+            pass
+        else:
+            img = pre.erase_lines(filepath)
+            hocr_file = ocr.extract_text(filename, directory)
