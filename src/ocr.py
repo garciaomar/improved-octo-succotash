@@ -1,4 +1,5 @@
 import os
+from classes import BoundingBox
 
 def extract_text(filename, filepath):
     name = filename[:-4]
@@ -38,16 +39,16 @@ def parse(filepath):
             words = list()
             for element in elements:
                 if 'ocrx_word' in element:
-                    content = element[element.index('">') + 2 : -2].strip()
+                    word = element[element.index('">') + 2 : -2].strip()
                     if 'bbox' in element:
                         start = element.index('bbox')
                         end = element[start : ].index('"')
-                        bbox = element[start + 5: start + end]
-                    word = wordbox(bbox, content)
+                        coords = element[start + 5: start + end]
+                    bbox = BoundingBox(coords, word)
                     if content == 'Aguascalientes':
-                        top = word
+                        top = bbox.word
                     elif content == 'TOTAL':
-                        bottom = word
+                        bottom = bbox.word
                     last = None
                     try:
                         last = words[-1]
@@ -84,6 +85,7 @@ def parse(filepath):
             position = 0
         else:
             position += 1
+
     #Writing output file
     output_words = open("prueba.txt", "w")
     for word in kept:
