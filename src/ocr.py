@@ -1,15 +1,6 @@
 import os
 from classes import BoundingBox
 
-#Removes xml tags from the words obtained from the bounding boxes
-def removeTags(word, count):
-    if count == 1:
-        return word[word.index('>') + 1 : word.index("</")]
-    elif count == 2:
-        return word[word.find('>', word.index('>') + 1) + 1 : word.index("</")]
-    else:
-        return word
-
 def extract_text(filename, filepath):
     name = filename[:-4]
     outputfile = "xmlfiles/" + name + "_out"
@@ -18,6 +9,25 @@ def extract_text(filename, filepath):
     os.system("tesseract " + filepath + outputfile + options)
     outputfile += ".hocr"
     return outputfile
+
+#Removes xml tags from the words obtained from the bounding boxes
+def remove_tags(word, count):
+    if count == 1:
+        return word[word.index('>') + 1 : word.index("</")]
+    elif count == 2:
+        return word[word.find('>', word.index('>') + 1) + 1 : word.index("</")]
+
+def is_CIE_code(text):
+    if len(text) > 2:
+        if text[0].isalpha() and text[1].isdigit() and text[2].isdigit():
+            return True
+    return False
+
+def compose_filename(data):
+    cies = ""
+    for code in data['CIE']:
+        cies += code + '_'
+    return "%s%s_%s" % (cies, data['week'], data['year'])
 
 def parse(filepath):
     try:
@@ -32,6 +42,10 @@ def parse(filepath):
     bottom = None
     lines = list()
     bboxes = list()
+    filename = dict()
+    filename['CIE'] = list()
+    epiweekFound = True
+
     for tag in xml_tags:
         ignore_tags.append(tag + '>')
         ignore_tags.append('<' + tag)
@@ -46,14 +60,15 @@ def parse(filepath):
             continue
         if 'span' in line:
             elements = line.split('span')
-            print(elements)
             for element in elements:
                 coords = None
                 word = None
                 if element.find("ocrx_word") != -1 and element.find("bbox") != -1:
                     word = element[element.index('>') + 1 : -2].strip()
                     if '<' in word:
-                        word = removeTags(word, word.count('</'))
+                        word = remove_tags(word, word.count('</'))
+                    if is_CIE_code(word):
+                        filename['CIE'].append(word.strip(','))
                     start = element.index('bbox')
                     end = element[start : ].index(';')
                     coords = element[start + 5: start + end]
@@ -63,9 +78,10 @@ def parse(filepath):
                     elif word == 'TOTAL':
                         bottom = bbox.word
                     bboxes.append(bbox)
-    if len(bboxes) > 0:
-        lines.append(bboxes)
-
+            if epiweekFound:
+                filename['year'] = bboxes[-1].word
+                filename['week'] = bboxes[-2].word.strip(',')
+                epiweekFound = False
     hocr.close()
     kept = list()
     for line in lines:
