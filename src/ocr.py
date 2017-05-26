@@ -89,27 +89,27 @@ def parse(filepath):
     position = 0
     rows = dict()
     while position < len(kept):
-        word = kept[position]
-        if word not in rows:
-            rows[word] = [word]
+        bbox = kept[position]
+        if bbox not in rows:
+            rows[bbox] = [bbox]
         remove = list()
         for other in kept:
-            if word != other:
-                if word.same(other):
-                    word.merge(other)
+            if bbox != other:
+                if bbox.same(other):
+                    bbox.merge(other)
                     remove.append(other)
-                elif word.row(other):
-                    rows[word].append(other)
+                elif bbox.sameRow(other):
+                    rows[bbox].append(other)
                     remove.append(other)
         if len(remove) > 0:
-            for absorbed in remove:
-                kept.remove(absorbed)
+            for merged in remove:
+                kept.remove(merged)
             position = 0
         else:
             position += 1
 
     #Writing output file
     output_words = open("prueba.txt", "w")
-    for word in kept:
-        output_words.write(word)
+    for bbox in kept:
+        output_words.write(bbox.word)
     output_words.close()
