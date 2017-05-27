@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: latin-1 -*-
+
 import os
 from classes import BoundingBox
 
@@ -29,6 +32,15 @@ def compose_filename(data):
         cies += code + '_'
     return "%s%s_%s" % (cies, data['week'], data['year'])
 
+def stateTypo(string1, string2):
+    cost = 0
+    if len(string1) != len(string2):
+        return False
+    for i in range(len(string1)):
+        if string1[i] != string2[i]:
+            cost += 1
+    return cost <= 2
+
 def parse(filepath):
     try:
         hocr = open(filepath, 'r')
@@ -45,6 +57,7 @@ def parse(filepath):
     filename = dict()
     filename['CIE'] = list()
     epiweekFound = True
+    states = ["Aguascalientes", "Baja California", "Baja California Sur", "Campeche", "Coahuila", "Colima", "Chiapas", "Chihuahua", "Distrito Federal", "Durango", "Guanajuato", "Guerrero", "Hidalgo", "Jalisco", "México", "Michoacán", "Morelos", "Nayarit", "Nuevo León", "Oaxaca", "Puebla", "Querétaro", "Quintana Roo", "San Luis Potosí", "Sinaloa", "Sonora", "Tabasco", "Tamaulipas", "Tlaxcala", "Veracruz", "Yucatán", "Zacatecas"]
 
     for tag in xml_tags:
         ignore_tags.append(tag + '>')
@@ -77,39 +90,57 @@ def parse(filepath):
                         top = bbox.word
                     elif word == 'TOTAL':
                         bottom = bbox.word
-                    bboxes.append(bbox)
+                    last = None
+                    try:
+                        last = bboxes[-1]
+                    except:
+                        pass
+                    if last is not None and bbox.sameWord(last):
+                        last.merge(bbox)
+                        bboxes.pop()
+                        bboxes.append(last)
+                    else:
+                        bboxes.append(bbox)
             if epiweekFound:
                 filename['year'] = bboxes[-1].word
                 filename['week'] = bboxes[-2].word.strip(',')
                 epiweekFound = False
-    hocr.close()
-    kept = list()
-    for line in lines:
-        kept += line
+
+    #Find Rows
     position = 0
     rows = dict()
-    while position < len(kept):
-        bbox = kept[position]
+    while position < len(bboxes):
+        bbox = bboxes[position]
         if bbox not in rows:
             rows[bbox] = [bbox]
         remove = list()
-        for other in kept:
+        for other in bboxes:
             if bbox != other:
-                if bbox.same(other):
-                    bbox.merge(other)
-                    remove.append(other)
-                elif bbox.sameRow(other):
+                if bbox.sameRow(other):
                     rows[bbox].append(other)
                     remove.append(other)
         if len(remove) > 0:
             for merged in remove:
-                kept.remove(merged)
+                bboxes.remove(merged)
             position = 0
         else:
             position += 1
 
+    #Fixes misspelled state names
+    for key in rows:
+        for j in range(len(states)):
+            #First word in the dictionary of rows
+            word = rows[key][0].word
+            statename = states[j]
+            if stateTypo(word, statename):
+                rows[key][0].word = statename
+                
+    outputname = compose_filename(filename) + ".txt"
+
     #Writing output file
-    output_words = open("prueba.txt", "w")
-    for bbox in kept:
-        output_words.write(bbox.word)
+    output_words = open(outputname, "w")
+    for row in rows:
+        for element in rows[row]:
+            output_words.write(element.word + ' ')
+        output_words.write('\n')
     output_words.close()

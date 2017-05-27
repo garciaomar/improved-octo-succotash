@@ -21,7 +21,7 @@ def convertPDF():
         fromPage = sys.argv[2]
         toPage = sys.argv[3]
         #this options enhance the quality of the output images, aswell as cut the borders of the image
-        options = " -quality 100 -sharpen 0x1.0 -alpha off -trim "
+        options = " -quality 100 -sharpen 0x1.0 -trim "
         os.system("convert -density 200 " + path + "[" + fromPage + "-" + toPage + "]" + options + output)
         #retuns the directory where the output images are stored
         return "images/" + filename

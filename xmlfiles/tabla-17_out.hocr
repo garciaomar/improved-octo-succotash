@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <title></title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name='ocr-system' content='tesseract 3.04.01' />
+  <meta name='ocr-capabilities' content='ocr_page ocr_carea ocr_par ocr_line ocrx_word'/>
+</head>
+<body>
+  <div class='ocr_page' id='page_1' title='image "images/BOL-EPID-2016-SE52/tabla-17_binary.png"; bbox 0 0 1062 392; ppageno 0'>
+   <div class='ocr_carea' id='block_1_1' title="bbox 128 43 985 61">
+    <p class='ocr_par' dir='ltr' id='par_1_1' title="bbox 128 43 985 61">
+     <span class='ocr_line' id='line_1_1' title="bbox 128 43 985 61; baseline 0.002 -2; x_size 21.333334; x_descenders 5.3333335; x_ascenders 5.3333335"><span class='ocrx_word' id='word_1_1' title='bbox 128 43 204 60; x_wconf 49' lang='spa' dir='ltr'><strong>*(Íx&#39;xlmn</strong></span> <span class='ocrx_word' id='word_1_2' title='bbox 432 43 466 60; x_wconf 54' lang='spa' dir='ltr'><strong>IH&lt;-l</strong></span> <span class='ocrx_word' id='word_1_3' title='bbox 485 50 494 60; x_wconf 53' lang='spa'><strong>¿&#39;</strong></span> <span class='ocrx_word' id='word_1_4' title='bbox 502 44 588 60; x_wconf 57' lang='spa' dir='ltr'><strong>&#39;Il&#39;iíuidv.1</strong></span> <span class='ocrx_word' id='word_1_5' title='bbox 764 44 826 61; x_wconf 48' lang='spa' dir='ltr'><strong>|]i&lt;-b¡v</strong></span> <span class='ocrx_word' id='word_1_6' title='bbox 837 45 960 61; x_wconf 57' lang='spa' dir='ltr'><strong>|]&#39;.¡¡.Hiíuidxn1</strong></span> <span class='ocrx_word' id='word_1_7' title='bbox 971 46 985 61; x_wconf 48' lang='spa'><strong>:*…</strong></span> 
+     </span>
+    </p>
+   </div>
+   <div class='ocr_carea' id='block_1_2' title="bbox 97 72 942 359">
+    <p class='ocr_par' dir='ltr' id='par_1_2' title="bbox 97 72 942 359">
+     <span class='ocr_line' id='line_1_2' title="bbox 97 72 942 89; baseline 0.001 -1; x_size 25; x_descenders 7; x_ascenders 4"><span class='ocrx_word' id='word_1_8' title='bbox 97 72 235 88; x_wconf 34' lang='spa' dir='ltr'><strong>(illnfun&#39;nm…</strong></span> <span class='ocrx_word' id='word_1_9' title='bbox 440 72 578 88; x_wconf 61' lang='spa' dir='ltr'><strong>&lt;i|¡ni—un—&#39;nz_n,</strong></span> <span class='ocrx_word' id='word_1_10' title='bbox 804 73 942 89; x_wconf 60' lang='spa' dir='ltr'><strong>&lt;i|¡ni—un—&#39;Dl…w</strong></span> 
+     </span>
+     <span class='ocr_line' id='line_1_3' title="bbox 146 101 901 118; baseline 0.003 -2; x_size 25; x_descenders 7; x_ascenders 4"><span class='ocrx_word' id='word_1_11' title='bbox 146 102 188 117; x_wconf 65' lang='spa' dir='ltr'><strong>M…</strong></span> <span class='ocrx_word' id='word_1_12' title='bbox 480 101 541 116; x_wconf 52' lang='spa'><strong>:……</strong></span> <span class='ocrx_word' id='word_1_13' title='bbox 844 103 901 118; x_wconf 60' lang='spa' dir='ltr'><strong>m…</strong></span> 
+     </span>
+     <span class='ocr_line' id='line_1_4' title="bbox 393 281 502 299; baseline 0 0; x_size 25; x_descenders 7; x_ascenders 4"><span class='ocrx_word' id='word_1_14' title='bbox 393 282 407 299; x_wconf 62' lang='spa'><strong><em>4</em></strong></span> <span class='ocrx_word' id='word_1_15' title='bbox 463 281 502 299; x_wconf 70' lang='spa'><strong>248</strong></span> 
+     </span>
+     <span class='ocr_line' id='line_1_5' title="bbox 397 311 502 329; baseline 0 0; x_size 25; x_descenders 7; x_ascenders 4"><span class='ocrx_word' id='word_1_16' title='bbox 397 319 407 323; x_wconf 73' lang='spa'><strong>—</strong></span> <span class='ocrx_word' id='word_1_17' title='bbox 476 311 502 329; x_wconf 68' lang='spa'><strong>39</strong></span> 
+     </span>
+     <span class='ocr_line' id='line_1_6' title="bbox 393 341 502 359; baseline 0 0; x_size 25; x_descenders 7; x_ascenders 4"><span class='ocrx_word' id='word_1_18' title='bbox 393 341 406 359; x_wconf 68' lang='spa'><strong>2</strong></span> <span class='ocrx_word' id='word_1_19' title='bbox 476 341 502 359; x_wconf 69' lang='spa'><strong>8?</strong></span> 
+     </span>
+    </p>
+   </div>
+  </div>
+ </body>
+</html>
