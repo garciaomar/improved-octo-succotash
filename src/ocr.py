@@ -106,7 +106,7 @@ def parse(filepath):
                 filename['week'] = bboxes[-2].word.strip(',')
                 epiweekFound = False
 
-    #Find Rows
+    #Separar por filas
     position = 0
     rows = dict()
     while position < len(bboxes):
@@ -127,6 +127,8 @@ def parse(filepath):
             position += 1
 
     #Fixes misspelled state names
+    only_states = dict()
+    total = list()
     for key in rows:
         for j in range(len(states)):
             #First word in the dictionary of rows
@@ -134,13 +136,52 @@ def parse(filepath):
             statename = states[j]
             if stateTypo(word, statename):
                 rows[key][0].word = statename
-                
-    outputname = compose_filename(filename) + ".txt"
+        #Keep only the rows with states
+        correct_state = rows[key][0].word
+        if correct_state in states:
+            only_states[correct_state] = rows[key]
+        if correct_state == "TOTAL":
+            total = rows[key]
 
-    #Writing output file
-    output_words = open(outputname, "w")
-    for row in rows:
-        for element in rows[row]:
-            output_words.write(element.word + ' ')
+
+    #Format to csv
+    ouputpath = "salidas/" + compose_filename(filename) + ".csv"
+    output_words = open(ouputpath, "w")
+
+    year = int(filename['year'])
+    output_words.write("Estado, , , , , Datos, , , \n")
+    output_words.write(", , %s, , %s, , %s, , %s\n" % (year, year -1, year, year -1))
+    output_words.write(", Semana, Acum-M, Acum-F, Acum, Semana, Acum-M, Acum-F, Acum\n")
+
+    for key in sorted(only_states):
+        length = len(only_states[key])
+        #State name first
+        statename = str(only_states[key].pop(0))
+        output_words.write(statename + ", ")
+        if length < 9:
+            for i in range(9 - length):
+                output_words.write("NA, ")
+        index = 0
+        for elem in only_states[key]:
+            word = elem.word
+            if word.isdigit():
+                output_words.write(word)
+            else:
+                output_words.write("NA")
+            index += 1
+            if index < length - 1:
+                output_words.write(', ')
         output_words.write('\n')
+    i = 0
+    length = len(total)
+    head = str(total.pop(0))
+    output_words.write(head + ", ")
+    if length < 9:
+        for i in range(9 - length):
+            output_words.write("NA, ")
+    for elem in total:
+        output_words.write(elem.word)
+        i += 1
+        if i < len(total):
+            output_words.write(', ')
     output_words.close()

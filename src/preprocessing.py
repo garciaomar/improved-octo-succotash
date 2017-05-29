@@ -28,25 +28,21 @@ def convertPDF():
 
 def erase_lines(filename):
     image = Image.open(filename)
-    pixels = numpy.array(image)
-    #(width, height, chanels) = numpy.shape(pixels)
-    elems = list()
-    elems = numpy.shape(pixels)
-    width = elems[0]
-    height = elems[1]
-
+    #pixels = numpy.array(image)
+    (width, height) = image.size
+    
     black = 0
     white = 255
     treshold = 255 / 2
     color = 10
     extreme = 20
     gray = 192
-    result = numpy.zeros((width, height), numpy.uint8)
+    result = numpy.zeros((height, width), numpy.uint8)
     blacks = list()
-
-    for column in xrange(width):
-        for row in xrange(height):
-            pixel = pixels[column, row]
+    
+    for row in xrange(height):
+        for column in xrange(width):
+            pixel = image.getpixel((column, row))
             r = int(pixel[0])
             g = int(pixel[1])
             b = int(pixel[2])
@@ -56,15 +52,15 @@ def erase_lines(filename):
             #neither white or a shade of gray
             if max(absolutes) > color:
                #turns color pixels to white
-    	       result[column, row] = white
+    	       result[row, column] = white
                continue
             #turns dark pixels to pure black
             if rgb_sum < extreme:
-    		    result[column, row] = black
+    		    result[row, column] = black
     		    blacks.append((column, row))
     		    continue
             if mean < treshold:
-    		    result[column, row] = black
+    		    result[row, column] = black
     		    blacks.append((column, row))
     		    continue
             #if it is a brighter pixel
@@ -76,7 +72,8 @@ def erase_lines(filename):
                 #check the current pixel neighborhood
                 for neighbor in neighborhood:
                     try:
-                        pixel2 = pixels[neighbor[0], neighbor[1]]
+                        #pixel2 = pixels[neighbor[0], neighbor[1]]
+                        pixel2 = image.getpixel((neighbor[0], neighbor[1]))
                     except IndexError:
                         continue
                     r2 = int(pixel2[0])
@@ -88,30 +85,30 @@ def erase_lines(filename):
                     acum += fabs(mean - mean2)
                 #if there is a considerable difference, then this pixel is considered to be part of a white character
                 if acum > 1 and acum < 250:
-    		        result[column, row] = black
+    		        result[row, column] = black
     		        blacks.append((column, row))
                 #no difference, then is a pixel of the background and stays white
                 else:
-                    result[column, row] = white
-
+                    result[row, column] = white
+    
     #minimum pixels to be considered a verical line
 
-    line = 30
+    line = 25
     remaining = list()
     while len(blacks) > 0:
         pixel = blacks.pop(0)
         (column, row) = pixel
-        if result[column, row] == black:
+        if result[row, column] == black:
             ccount = 1
-            pos = column
-            while pos < width and result[pos, row] == black:
+            pos = row
+            while pos < width and result[pos, column] == black:
                 pos += 1
                 ccount += 1
             #erase vertical lines
             if ccount > line:
                 for d in xrange(ccount):
-            		if column + d < width:
-                            	result[column + d, row] = white
+                    if row + d < height:
+                        result[row + d, column] = white
             #not considered as a vertical line
             else:
                 remaining.append(pixel)
@@ -120,23 +117,24 @@ def erase_lines(filename):
     line = 60
     for pixel in remaining:
         (column, row) = pixel
-        if result[column, row] == black:
+        if result[row, column] == black:
             rcount = 1
-            pos = row
-            while pos < height and result[column, pos] == black:
+            pos = column
+            while pos < width and result[row, pos] == black:
                 pos += 1
                 rcount += 1
             #erase horizontal lines
             if rcount > line:
                 for d in xrange(rcount):
-                    result[column, row + d] = white
+                    if column + d < width:
+                        result[row, column + d] = white
 
     name = filename[:-4]
     data = Image.fromarray(result)
     outputname = name + "_binary.png"
     data.save(outputname)
     print("Saved binary image")
-    return outputname
+    #return outputname
 
 def dfs(pixels, column, row):
     cont = true
